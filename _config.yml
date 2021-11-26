@@ -20,9 +20,9 @@ sidebar-avatar: /img/about-jzt-gentle.jpg      # use absolute URL, seeing it's u
 RSS: false
 # weibo_username:     qiubaiying
 # zhihu_username:     qiubaiying
-github_username:    qiubaiying
-facebook_username:  baiying.qiu.7
-jianshu_username:   e71990ada2fd
+github_username:    jzt-Tesla
+# facebook_username:  baiying.qiu.7
+# jianshu_username:   e71990ada2fd
 #twitter_username:   qiubaiying
 
 
@@ -102,8 +102,8 @@ friends: [
         title: "Baidu",
         href: "https://www.baidu.com/"
     },{
-        title: "Google",
-        href: "https://www.google.com.hk/"
+        title: "Csdn",
+        href: "https://blog.csdn.net/"
     },{
         title: "Leetcode",
         href: "https://leetcode-cn.com/"
@@ -113,6 +113,8 @@ friends: [
     },{
         title: "Jekyll",
         href: "http://jekyllcn.com/"
-  
+  },{
+        title: "Google",
+        href: "https://www.google.com.hk/"
   }
 ]
