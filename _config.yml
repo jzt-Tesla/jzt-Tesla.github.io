@@ -64,7 +64,7 @@ gitalk:
   enable: true    #是否开启Gitalk评论
   clientID: 8ac34c9ab08adf6b23b4                            #生成的clientID
   clientSecret: a0a84b7a354a89b3b1c63327525008467b9312b5    #生成的clientSecret
-  repo: jzt-Tesla-BlogComments    #仓库名称
+  repo: jzt-Tesla.github.io   #仓库名称
   owner: jzt-Tesla    #github用户名
   admin: jzt-Tesla
   distractionFreeMode: false #是否启用类似FB的阴影遮罩

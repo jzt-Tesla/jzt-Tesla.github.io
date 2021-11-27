@@ -114,9 +114,21 @@ header-img: "img/post-bg-rwd.jpg"
     owner: '{{site.gitalk.owner}}',
     admin: ['{{site.gitalk.admin}}'],
     distractionFreeMode: {{site.gitalk.distractionFreeMode}},
-    id: "https://jzt-tesla.github.io/page3_about/",
+    id: location.pathname,
     });
     gitalk.render('gitalk-container');
+
+  //   var gitalk = new Gitalk({
+  // clientID: 'GitHub Application Client ID',
+  // clientSecret: 'GitHub Application Client Secret',
+  // repo: 'GitHub repo',
+  // owner: 'GitHub repo owner',
+  // admin: ['GitHub repo owner and collaborators, only these guys can initialize github issues'],
+  // id: location.pathname,      // 请确保你的 location 连接小于 50 个字符，否则，插件会生成失败
+  // distractionFreeMode: false  // 专注模式
+})
+
+gitalk.render('gitalk-container')
 </script>
 {% endif %}
 
