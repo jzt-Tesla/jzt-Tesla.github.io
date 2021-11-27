@@ -100,7 +100,7 @@ layout: default
 
                 <!-- Short About -->
                 <section class="visible-md visible-lg">
-                    <hr><h5><a href="{{'/about/' | prepend: site.baseurl }}">ABOUT ME</a></h5>
+                    <hr><h5><a href="{{'/about/' | prepend: site.baseurl }}">自我介绍</a></h5>
                     <div class="short-about">
                         {% if site.sidebar-avatar %}
                             <a href="{{ site.baseurl }}/about">
@@ -122,23 +122,33 @@ layout: default
                                 </a>
                             </li>
                             {% endif %}
-                            <!-- add jianshu add target = "_blank" to <a> by BY -->
-                            {% if site.jianshu_username %}
+                                {% if site.github_username %}
                             <li>
-                                <a target="_blank" href="https://www.jianshu.com/u/{{ site.jianshu_username }}">
+                                <a target="_blank" href="https://github.com/{{ site.github_username }}">
                                     <span class="fa-stack fa-lg">
                                         <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa  fa-stack-1x fa-inverse">简</i>
+                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
                                     </span>
                                 </a>
                             </li>
                             {% endif %}
-                            {% if site.twitter_username %}
+                            <!-- add csdn add target = "_blank" to <a> by BY -->
+                            {% if site.csdn_username %}
                             <li>
-                                <a href="https://twitter.com/{{ site.twitter_username }}">
+                                <a target="_blank" href="https://blog.csdn.net/{{ site.csdn_username }}">
                                     <span class="fa-stack fa-lg">
                                         <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                        <i class="fa  fa-stack-1x fa-inverse">C</i>
+                                    </span>
+                                </a>
+                            </li>
+                            {% endif %}
+                            {% if site.email_username %}
+                            <li>
+                                <a href="mailto:{{ site.email_username }}">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fa fa-circle fa-stack-2x"></i>
+                                        <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
                                     </span>
                                 </a>
                             </li>
@@ -173,21 +183,9 @@ layout: default
                                 </a>
                             </li>
                             {% endif %}
-                            {% if site.github_username %}
-                            <li>
-                                <a target="_blank" href="https://github.com/{{ site.github_username }}">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fa fa-circle fa-stack-2x"></i>
-                                        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            {% endif %}
-                            
+                        
                         </ul>
-                        {% if site.email %}
-                            <p>✉️ {{site.email}}</p>
-                        {% endif %}
+                        
                     </div>
                 </section>
                 <!-- Friends Blog -->

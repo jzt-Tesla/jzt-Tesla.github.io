@@ -1094,7 +1094,8 @@ a {
 }
 a:hover,
 a:focus {
-  color: #23527c;
+  color: #2ED16D;
+   /*23527c*/
   text-decoration: underline;
 }
 a:focus {
@@ -1330,19 +1331,22 @@ mark,
   color: #337ab7;
 }
 a.text-primary:hover {
-  color: #286090;
+  /*color: #286090;*/
+  color: #2ED16D;
 }
 .text-success {
   color: #3c763d;
 }
 a.text-success:hover {
-  color: #2b542c;
+  /*color: #2b542c;*/
+   color: #2ED16D;
 }
 .text-info {
   color: #31708f;
 }
 a.text-info:hover {
-  color: #245269;
+  /*color: #245269;*/
+   color: #2ED16D;
 }
 .text-warning {
   color: #8a6d3b;
@@ -1361,19 +1365,22 @@ a.text-danger:hover {
   background-color: #337ab7;
 }
 a.bg-primary:hover {
-  background-color: #286090;
+  /*background-color: #286090;*/
+  color: #2ED16D;
 }
 .bg-success {
   background-color: #dff0d8;
 }
 a.bg-success:hover {
-  background-color: #c1e2b3;
+  /*background-color: #c1e2b3;*/
+  color: #2ED16D;
 }
 .bg-info {
   background-color: #d9edf7;
 }
 a.bg-info:hover {
-  background-color: #afd9ee;
+  /*background-color: #afd9ee;*/
+  color: #2ED16D;
 }
 .bg-warning {
   background-color: #fcf8e3;
@@ -2301,7 +2308,8 @@ th {
   background-color: #f9f9f9;
 }
 .table-hover > tbody > tr:hover {
-  background-color: #f5f5f5;
+  /*background-color: #f5f5f5;*/
+  color: #2ED16D;
 }
 table col[class*="col-"] {
   position: static;
@@ -2333,7 +2341,8 @@ table th[class*="col-"] {
 .table-hover > tbody > tr.active:hover > td,
 .table-hover > tbody > tr:hover > .active,
 .table-hover > tbody > tr.active:hover > th {
-  background-color: #e8e8e8;
+  /*background-color: #e8e8e8;*/
+  background-color: #2ED16D;
 }
 .table > thead > tr > td.success,
 .table > tbody > tr > td.success,
@@ -2354,7 +2363,9 @@ table th[class*="col-"] {
 .table-hover > tbody > tr.success:hover > td,
 .table-hover > tbody > tr:hover > .success,
 .table-hover > tbody > tr.success:hover > th {
-  background-color: #d0e9c6;
+  /*background-color: #d0e9c6;*/
+  background-color: #2ED16D;
+
 }
 .table > thead > tr > td.info,
 .table > tbody > tr > td.info,
@@ -2375,7 +2386,8 @@ table th[class*="col-"] {
 .table-hover > tbody > tr.info:hover > td,
 .table-hover > tbody > tr:hover > .info,
 .table-hover > tbody > tr.info:hover > th {
-  background-color: #c4e3f3;
+  /*background-color: #c4e3f3;*/
+  background-color: #2ED16D;
 }
 .table > thead > tr > td.warning,
 .table > tbody > tr > td.warning,
@@ -2396,7 +2408,8 @@ table th[class*="col-"] {
 .table-hover > tbody > tr.warning:hover > td,
 .table-hover > tbody > tr:hover > .warning,
 .table-hover > tbody > tr.warning:hover > th {
-  background-color: #faf2cc;
+  /*background-color: #faf2cc;*/
+  background-color: #2ED16D;
 }
 .table > thead > tr > td.danger,
 .table > tbody > tr > td.danger,
@@ -2417,7 +2430,8 @@ table th[class*="col-"] {
 .table-hover > tbody > tr.danger:hover > td,
 .table-hover > tbody > tr:hover > .danger,
 .table-hover > tbody > tr.danger:hover > th {
-  background-color: #ebcccc;
+  /*background-color: #ebcccc;*/
+  background-color: #2ED16D;
 }
 .table-responsive {
   min-height: .01%;
@@ -3887,7 +3901,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav .open > a:hover,
 .nav .open > a:focus {
   background-color: #eee;
-  border-color: #337ab7;
+  /*border-color: #337ab7;*/
+  border-color: #2ED16D;
+  
 }
 .nav .nav-divider {
   height: 1px;
@@ -4755,28 +4771,37 @@ a.label:focus {
 }
 .label-default[href]:hover,
 .label-default[href]:focus {
-  background-color: #5e5e5e;
+  /*background-color: #5e5e5e;*/
+    background-color: #2ED16D;
+
+  
 }
 .label-primary {
   background-color: #337ab7;
 }
 .label-primary[href]:hover,
 .label-primary[href]:focus {
-  background-color: #286090;
+  background-color: #2ED16D;
 }
 .label-success {
   background-color: #5cb85c;
 }
 .label-success[href]:hover,
 .label-success[href]:focus {
-  background-color: #449d44;
+  /*background-color: #449d44;*/
+    background-color: #2ED16D;
+
 }
 .label-info {
-  background-color: #5bc0de;
+  /*background-color: #5bc0de;*/
+      background-color: #2ED16D;
+
 }
 .label-info[href]:hover,
 .label-info[href]:focus {
-  background-color: #31b0d5;
+  /*background-color: #31b0d5;*/
+      background-color: #2ED16D;
+
 }
 .label-warning {
   background-color: #f0ad4e;
@@ -5147,7 +5172,9 @@ a.list-group-item:hover,
 a.list-group-item:focus {
   color: #555;
   text-decoration: none;
-  background-color: #f5f5f5;
+/*  background-color: #f5f5f5;*/
+    background-color: #2ED16D;
+
 }
 .list-group-item.disabled,
 .list-group-item.disabled:hover,
