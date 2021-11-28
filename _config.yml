@@ -3,46 +3,34 @@ title: jzt-Tesla Blog
 SEOTitle: 江子涛Tesla的博客 | jzt-Tesla Blog
 header-img: img/post-bg-desk.jpg
 email: jiangzitao201314@foxmail.com
-# description: "Every failure is leading towards success."
-# keyword: "BY, BY Blog, 柏荧的博客, qiubaiying, 邱柏荧, iOS, Apple, iPhone"
-url: "https://jzt-tesla.github.io/"          # your host, for absolute URL
-baseurl: ""      # for example, '/blog' if your blog hosted on 'host/blog'
-github_repo: "https://github.com/qiubaiying/qiubaiying.github.io.git" # you code repository
+url: "https://jzt-tesla.github.io/" # your host, for absolute URL
+baseurl: "" # for example, '/blog' if your blog hosted on 'host/blog'
+github_repo: "https://github.com/jzt-Tesla/jzt-Tesla.github.io.git" # you code repository
 
-# Sidebar settings
-sidebar: true                           # whether or not using Sidebar.
+# 个人右边介绍
+sidebar: true # whether or not using Sidebar.
 sidebar-about-description: "日拱一卒，功不唐捐"
-sidebar-avatar: /img/about-jzt-gentle.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
-
-
+sidebar-avatar: /img/about-jzt-gentle.jpg # use absolute URL, seeing it's used in both `/` and `/about/`
 
 # SNS settings
 RSS: false
 # weibo_username:     qiubaiying
 # zhihu_username:     qiubaiying
-github_username:    jzt-Tesla
+github_username: jzt-Tesla
 # facebook_username:  baiying.qiu.7
-csdn_username:   u010312949
-email_username:   jiangzitao201314@foxmail.com
-
-
-
+csdn_username: u010312949
+email_username: jiangzitao201314@foxmail.com
 
 # Build settings
 # from 2016, 'pygments' is unsupported on GitHub Pages. Use 'rouge' for highlighting instead.
 permalink: pretty
 paginate: 10
-exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
-anchorjs: true                          # if you want to customize anchor. check out line:181 of `post.html`
-
-
+exclude: ["less", "node_modules", "Gruntfile.js", "package.json", "README.md"]
+anchorjs: true # if you want to customize anchor. check out line:181 of `post.html`
 
 # Gems
 # from PR#40, to support local preview for Jekyll 3.0
 gems: [jekyll-paginate]
-
-
-
 
 # Markdown settings
 # replace redcarpet to kramdown,
@@ -51,9 +39,7 @@ gems: [jekyll-paginate]
 markdown: kramdown
 highlighter: rouge
 kramdown:
-  input: GFM                            # use Github Flavored Markdown !important
-
-
+  input: GFM # use Github Flavored Markdown !important
 
 # 评论系统
 # Disqus（https://disqus.com/）
@@ -61,60 +47,29 @@ kramdown:
 
 # Gitalk
 gitalk:
-  enable: true    #是否开启Gitalk评论
-  clientID: 8ac34c9ab08adf6b23b4                            #生成的clientID
-  clientSecret: a0a84b7a354a89b3b1c63327525008467b9312b5    #生成的clientSecret
-  repo: jzt-Tesla.github.io    #仓库名称
-  owner: jzt-Tesla    #github用户名
+  enable: true #是否开启Gitalk评论
+  clientID: 8ac34c9ab08adf6b23b4 #生成的clientID
+  clientSecret: a0a84b7a354a89b3b1c63327525008467b9312b5 #生成的clientSecret
+  repo: jzt-Tesla.github.io #仓库名称
+  owner: jzt-Tesla #github用户名
   admin: jzt-Tesla
   distractionFreeMode: false #是否启用类似FB的阴影遮罩
 
-
-# 统计
-
-# Analytics settings
-# Baidu Analytics
-ba_track_id: b50bf2b12b5338a1845e33832976fd68
-
-# Google Analytics
-ga_track_id: 'UA-90855596-1'            # Format: UA-xxxxxx-xx
-ga_domain: qiubaiying.top               # 默认的是 auto, 这里我是自定义了的域名，你如果没有自己的域名，需要改成auto
-
-
-
-
-
 # Featured Tags
-featured-tags: false                     # 是否使用首页标签
-featured-condition-size: 1              # 相同标签数量大于这个数，才会出现在首页
-
-
+featured-tags: false # 是否使用首页标签
+featured-condition-size: 1 # 相同标签数量大于这个数，才会出现在首页
 
 # Progressive Web Apps
 chrome-tab-theme-color: "#000000"
 service-worker: true
 
-
-
 # Friends
-friends: [
-    {
-        title: "Baidu",
-        href: "https://www.baidu.com/"
-    },{
-        title: "Csdn",
-        href: "https://blog.csdn.net/"
-    },{
-        title: "Leetcode",
-        href: "https://leetcode-cn.com/"
-    },{
-        title: "GitHub",
-        href: "https://github.com/"
-    },{
-        title: "Jekyll",
-        href: "http://jekyllcn.com/"
-  },{
-        title: "Google",
-        href: "https://www.google.com.hk/"
-  }
-]
+friends:
+  [
+    { title: "Baidu", href: "https://www.baidu.com/" },
+    { title: "Csdn", href: "https://blog.csdn.net/" },
+    { title: "Leetcode", href: "https://leetcode-cn.com/" },
+    { title: "GitHub", href: "https://github.com/" },
+    { title: "Jekyll", href: "http://jekyllcn.com/" },
+    { title: "Google", href: "https://www.google.com.hk/" },
+  ]
