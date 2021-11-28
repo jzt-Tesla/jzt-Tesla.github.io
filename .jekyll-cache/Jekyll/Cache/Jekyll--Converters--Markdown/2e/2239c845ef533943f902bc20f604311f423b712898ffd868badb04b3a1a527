@@ -1,0 +1,491 @@
+I"-[<h3 id="引言">引言：</h3>
+<p>之所以写这篇文章，一方面是最近工作中对Android串口通信方面学习的总结。另外一方面也希望能够帮助到大家，能够简单的去理解串口通信方面的知识。</p>
+
+<h3 id="为什么学习android串口通信">为什么学习Android串口通信：</h3>
+<ul>
+  <li>距离2008年发布第一款Android手机已经过去了10多年的时光了。现在Android的发展是百花齐放，尤其是对于很多公司而言，Android主板与各种传感器和智能设备之间通信是很常见的事情了，那么对于开发人员而言，学习串口通信是必要的事情了。</li>
+  <li>学习串口通信，能够提前了解JNI和NDK的知识，算是一个入门预习吧</li>
+  <li>Google出品，必属精品。我们现在市面上的所有Android串口通信的源代码都是Google公司在2011年开源的<a href="https://github.com/jzt-Tesla/android-serialport-api">Google官方源代码</a>，学习它也不妨是学习Google的设计思维。</li>
+</ul>
+
+<h3 id="集成串口通信">集成串口通信：</h3>
+<h4 id="导入so文件">导入.so文件</h4>
+<p>什么是.so文件：</p>
+
+<ul>
+  <li>.so文件是Unix的动态连接库，本身是二进制文件，是由C/C++编译而来的。</li>
+  <li>Android调用.so文件的过程也就是所谓的JNI了。在Android中想要调用C/C++中的API的话，也就是调用.so文件了。</li>
+</ul>
+
+<p><strong>一 、</strong> 复制图上所示的三个.so文件的文件夹，到Project –&gt;app –&gt;libs(没有就自己新建libs)</p>
+
+<p><img src="https://img-blog.csdnimg.cn/20190220114943488.PNG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAzMTI5NDk=,size_16,color_FFFFFF,t_70" alt=".so文件" />
+<strong>二 、</strong> 配置Gradle文件：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
+    defaultConfig {
+        applicationId "cn.humiao.myserialport"
+        minSdkVersion 14
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    
+    //这里是配置JNI的引用地址，也就是引用.so文件
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+</code></pre></div></div>
+<p>总结：就这样的几步，配置OK了，就能愉快的在Java里面直接调用C/C++了。啦啦啦啦 ~
+<img src="https://img-blog.csdnimg.cn/20190220115052854.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAzMTI5NDk=,size_16,color_FFFFFF,t_70" alt="就是这么简单" /></p>
+<h3 id="google串口代码分析">Google串口代码分析：</h3>
+<h4 id="serialport">SerialPort</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * Google官方代码
+ * 
+ * 此类的作用为，JNI的调用，用来加载.so文件的
+ * 
+ * 获取串口输入输出流
+ */
+
+public class SerialPort {
+
+    private static final String TAG = "SerialPort";
+
+    /*
+   * Do not remove or rename the field mFd: it is used                       
+   * close();
+   */
+    private FileDescriptor mFd;
+    private FileInputStream mFileInputStream;
+    private FileOutputStream mFileOutputStream;
+
+    public SerialPort(File device, int baudrate, int flags)
+            throws SecurityException, IOException {
+
+    /* Check access permission */
+        if (!device.canRead() || !device.canWrite()) {
+            try {
+                /* Missing read/write permission, trying to chmod the file */
+                Process su;
+                su = Runtime.getRuntime().exec("/system/bin/su");
+                String cmd = "chmod 666 " + device.getAbsolutePath() + "\n"
+                        + "exit\n";
+                su.getOutputStream().write(cmd.getBytes());
+                if ((su.waitFor() != 0) || !device.canRead()
+                        || !device.canWrite()) {
+                    throw new SecurityException();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new SecurityException();
+            }
+        }
+
+        System.out.println(device.getAbsolutePath() + "==============================");
+        //开启串口，传入物理地址、波特率、flags值
+        mFd = open(device.getAbsolutePath(), baudrate, flags);
+        if (mFd == null) {
+            Log.e(TAG, "native open returns null");
+            throw new IOException();
+        }
+        mFileInputStream = new FileInputStream(mFd);
+        mFileOutputStream = new FileOutputStream(mFd);
+    }
+
+     //获取串口的输入流
+    public InputStream getInputStream() {
+        return mFileInputStream;
+    }
+
+    //获取串口的输出流
+    public OutputStream getOutputStream() {
+        return mFileOutputStream;
+    }
+
+    // JNI调用，开启串口
+    private native static FileDescriptor open(String path, int baudrate, int flags);
+    //关闭串口
+    public native void close();
+    static {
+        System.out.println("==============================");
+        //加载库文件.so文件
+        System.loadLibrary("serial_port");
+        System.out.println("********************************");
+    }
+}
+
+</code></pre></div></div>
+
+<h4 id="一类作用及介绍">一：类作用及介绍</h4>
+<p>通过打开JNI的调用，打开串口。获取串口通信中的输入输出流，通过操作IO流，达到能够利用串口接收数据和发送数据的目的</p>
+<h4 id="二类方法介绍">二：类方法介绍</h4>
+<p><strong>A :</strong> 开启串口的方法：<font color="red">private native static FileDescriptor open(String path, int baudrate,int flags)</font></p>
+
+<ul>
+  <li>
+    <font color="red">path：</font>
+    <p>为串口的物理地址，一般硬件工程师都会告诉你的例如ttyS0、ttyS1等，或者通过SerialPortFinder类去寻找得到可用的串口地址。</p>
+  </li>
+  <li>
+    <font color="red">baudrate：</font>
+    <p>波特率，与外接设备一致</p>
+  </li>
+  <li>
+    <font color="red">flags：</font>
+    <p>设置为0，原因较复杂，见文章最底下。</p>
+  </li>
+</ul>
+
+<p><strong>B :</strong> IO流，如果你不是很明白输入输出流的话，可以看看这篇文章<a href="http://tieba.baidu.com/p/2503483060">史上最简单的IO流解释</a></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mFileInputStream = new FileInputStream(mFd);// 输入流，也就是获取从单片机或者传感器，通过串口传入到Android主板的IO数据（使用的时候，执行Read方法）
+mFileOutputStream = new FileOutputStream(mFd);//输出流，Android将需要传输的数据发送到单片机或者传感器（使用的时候，执行Write方法）
+</code></pre></div></div>
+
+<p>获取了输入输出流以后就可以对流进行操作了。
+ <img src="https://img-blog.csdnimg.cn/20190220115238510.jpg" alt="我爱学习" /></p>
+
+<h4 id="顺便科普一下我所理解的io流"><font color="red">顺便科普一下我所理解的IO流：</font></h4>
+
+<ul>
+  <li>将InputStream和OutputStream的流当做一个管道，所有的byte流（也可以说是二进制流，因为byte里面存储的都是bit）都是流动在这个管道里面的。管道通道两边的一边是内存，一边是外部存储。</li>
+  <li>所谓的写(Write)，也就是将内存的数据写到外部存储。反之，读(Read)也就是将外部存储的数据读取到内存里面。</li>
+  <li>
+    <font color="red">对于OutputStream与Write结合使用：</font>
+  </li>
+  <li>示例代码，不能直接运行，我只是讲一下我的思路:</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> byte[] sendData = DataUtils.HexToByteArr(data);
+ outputStream.write(sendData);
+ outputStream.flush(); 
+</code></pre></div></div>
+
+<p>首先是获取Byte数组，然后通过wite()方法将Byte数组放到管道OutputStream中，然后wirte出去，写出到外部存储。</p>
+
+<ul>
+  <li>
+    <font color="red">对于InputStream与Read结合使用：</font>
+  </li>
+</ul>
+
+<p>示例代码，不能直接运行，我只是讲一下我的思路:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>byte[] readData = new byte[1024];
+int size = inputStream.read(readData);
+String readString = DataUtils.ByteArrToHex(readData, 0, size);
+</code></pre></div></div>
+
+<p>首先，new一个byte数组，也就是在内存里面开辟一个空间用来存储byte字节。然后管道InputStream中的外部数据通过read方法，读取到内存里面，也就是byte[]中，返回值是读取的大小。然后再将byte[]转换为String。</p>
+
+<ul>
+  <li>
+    <font color="red">OutputStream和InputStream两个管道。输出流的管道里面是没有数据的，需要将数据写入；输入流的管道里是有数据的，需要读出来。</font>
+  </li>
+</ul>
+
+<hr />
+<p><img src="https://img-blog.csdnimg.cn/20190220115424131.jpg" alt="学习啊" /></p>
+
+<h3 id="serialportfinder">SerialPortFinder</h3>
+
+<ul>
+  <li>这个类是用来获取串口物理地址的，其实一般是用不到这个类的，因为硬件设备上串口的物理地址，在硬件上都是有具体标识的，你直接使用就可以了。Google既然有这个帮助类的话，我们就具体分析一波。</li>
+  <li>具体是这样的：
+    <ol>
+      <li>在这个方法中：<font color="red">Vector&lt; Driver &gt; getDrivers() throws IOException </font>读取 /proc/tty/drivers 里面的带有serial，也就是标识串口的地址，然后保存在一个集合里面，例如在我的Android设备中：
+<img src="https://img-blog.csdnimg.cn/20190220115636810.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAzMTI5NDk=,size_16,color_FFFFFF,t_70" alt="drivers的物理地址" />
+ 如图示，有八个不同类型的串口驱动地址。对我而言我需要的是/dev/ttyS</li>
+    </ol>
+  </li>
+</ul>
+
+<ol>
+  <li>在<font color="red">Vector&lt; File &gt; getDevices()</font>方法中，读取/dev下的地址。但是如图示，地址有很多，我们需要的是串口，那么就将drivers中读取的地址，与/dev中的地址匹配，成功的则存储到集合中。于是就成功获取到了所有串口地址了。</li>
+</ol>
+
+<p><img src="https://img-blog.csdnimg.cn/20190220115734396.JPG?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAzMTI5NDk=,size_16,color_FFFFFF,t_70" alt="dev地址" /></p>
+
+<ol>
+  <li>上面是具体的思路，我们一般使用的都是下面这个方法：
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public String[] getAllDevicesPath() {
+ Vector&lt;String&gt; devices = new Vector&lt;String&gt;();
+ // Parse each driver
+ Iterator&lt;Driver&gt; itdriv;
+ try {
+   itdriv = getDrivers().iterator();
+   while(itdriv.hasNext()) {
+     Driver driver = itdriv.next();
+     Iterator&lt;File&gt; itdev = driver.getDevices().iterator();
+     while(itdev.hasNext()) {
+       String device = itdev.next().getAbsolutePath();
+       devices.add(device);
+     }
+   }
+ } catch (IOException e) {
+   e.printStackTrace();
+ }
+ return devices.toArray(new String[devices.size()]);
+  }
+  //获取在设备目录下的，所有串口的具体物理地址，并且存入到数组里面。
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<ul>
+  <li>能够获取所有的串口的具体地址，然后进行选择你需要的物理地址就行了。一般来说的话，串口地址为: /dev/ttyS2、/dev/ttyS1、/dev/ttyS0</li>
+</ul>
+
+<h3 id="serialportutil">SerialPortUtil</h3>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public class SerialPortUtil {
+
+    private SerialPort serialPort = null;
+    private InputStream inputStream = null;
+    private OutputStream outputStream = null;
+    private ReceiveThread mReceiveThread = null;
+    private boolean isStart = false;
+
+    /**
+     * 打开串口，接收数据
+     * 通过串口，接收单片机发送来的数据
+     */
+    public void openSerialPort() {
+        try {
+            serialPort = new SerialPort(new File("/dev/ttyS0"), 9600, 0);
+            //调用对象SerialPort方法，获取串口中"读和写"的数据流
+            inputStream = serialPort.getInputStream();
+            outputStream = serialPort.getOutputStream();
+            isStart = true;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        getSerialPort();
+    }
+
+    /**
+     * 关闭串口
+     * 关闭串口中的输入输出流
+     */
+    public void closeSerialPort() {
+        Log.i("test", "关闭串口");
+        try {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            if (outputStream != null) {
+                outputStream.close();
+            }
+            isStart = false;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 发送数据
+     * 通过串口，发送数据到单片机
+     *
+     * @param data 要发送的数据
+     */
+    public void sendSerialPort(String data) {
+        try {
+            byte[] sendData = DataUtils.HexToByteArr(data);
+            outputStream.write(sendData);
+            outputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getSerialPort() {
+        if (mReceiveThread == null) {
+
+            mReceiveThread = new ReceiveThread();
+        }
+        mReceiveThread.start();
+    }
+
+    /**
+     * 接收串口数据的线程
+     */
+
+    private class ReceiveThread extends Thread {
+        @Override
+        public void run() {
+            super.run();
+            while (isStart) {
+                if (inputStream == null) {
+                    return;
+                }
+                byte[] readData = new byte[1024];
+                try {
+                    int size = inputStream.read(readData);
+                    if (size &gt; 0) {
+                        String readString = DataUtils.ByteArrToHex(readData, 0, size);
+                        EventBus.getDefault().post(readString);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
+
+}
+</code></pre></div></div>
+
+<p>一、类的作用：</p>
+<ul>
+  <li>实例化类SerialPort，传入地址和波特率和flags值，获取串口的IO流，然后对IO流进行操作。</li>
+  <li>注意一点：我这里因为与Android串口连接的设备都是需要的16进制的指令。所以我利用封装的工具类，将字符<font color="red">"010100000000FFFF"</font>转换为16进制的&lt;font color=#red&gt; 010100000000FFFF&lt;/font&gt;，也就是转Hex字符串为字节数组。</li>
+</ul>
+
+<p>二、发送数据：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>byte[] sendData = DataUtils.HexToByteArr(data);//转Hex字符串转字节数组
+outputStream.write(sendData);//写入数组到输出流
+outputStream.flush();//刷新
+</code></pre></div></div>
+
+<p>三 获取数据：
+因为是读取流，所以我专门开一个线程去读取流:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>private class ReceiveThread extends Thread {
+        @Override
+        public void run() {
+            super.run();
+            //是否开启串口
+            while (isStart) {
+                if (inputStream == null) {
+                    return;
+                }
+                //new一个Byte数组
+                byte[] readData = new byte[1024];
+                try {
+                //将流中数据读到Byte数组中，返回读的Size大小
+                    int size = inputStream.read(readData);
+                    if (size &gt; 0) {
+                    //将Byte数组转换了String
+                        String readString = DataUtils.ByteArrToHex(readData, 0, size);
+                        //跨线程通信，利用EventBus将数据传输到主线程，也可使用Handler
+                        EventBus.getDefault().post(readString);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
+</code></pre></div></div>
+
+<ul>
+  <li>别的都没什么可讲的了，看注释就行。其中重点是<font color="red">"布尔值：isStart"</font>。因为开启的线程是一直接收串口的数据的，如果不设置isStart的话，那么接收数据就只会执行一次，因为开启串口的时候才会new线程或者复用线程。而开启串口肯定只会执行一次，当然接收线程只会一次了。当时我没有写这个就被坑了半天时间！ 于是进行条件设置用While函数，那么只要是<font color="red">isStart == True,</font>那么线程就会一直执行下去！这就是条件判断的魅力！
+<img src="https://img-blog.csdnimg.cn/20190220115936867.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAzMTI5NDk=,size_16,color_FFFFFF,t_70" alt="学习一万年" /></li>
+</ul>
+
+<h3 id="一句话总结">一句话总结</h3>
+
+<font color="red">Android串口通信：抱歉，学会它真的可以为所欲为</font>
+
+<p><strong>—————————————————————————————————-</strong></p>
+
+<h3 id="对于串口的flag为0的理解-">对于串口的Flag为0的理解 ：</h3>
+
+<ol>
+  <li>
+    <p>打开串口的时候，一直很奇怪，为什么会存在flag为0。查询了很多资料，有的人说是因为这个是一个校验位<a href="https://www.cnblogs.com/1992monkey/p/4542430.html">Android串口通信</a></p>
+  </li>
+  <li>
+    <p>有的人说这个并没有任何的作用和意义。</p>
+  </li>
+  <li>
+    <p>我从Google的本身的代码。去研究发现，其flags在C++里面的代码是：
+<img src="https://img-blog.csdnimg.cn/20190220120016782.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAzMTI5NDk=,size_16,color_FFFFFF,t_70" alt="底层C++代码" /></p>
+  </li>
+</ol>
+<font color="red">关键的代码是：</font>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fd = open（path_utf, O_RDWR | flags) ;
+</code></pre></div></div>
+
+<h3 id="open函数">open()函数：</h3>
+<p>其中O_RDWR  表示可以读也可以写 ，为Linux下的Open函数里面的值。
+根据<a href="https://www.cnblogs.com/SharkBin/p/3985469.html">open各个参数含义</a>，我们可以知道，这是常用的一种用法，fd是设备描述符，linux在操作硬件设备时，屏蔽了硬件的基本细节，只把硬件当做文件来进行操作，而所有的操作都是以open函数来开始，它用来获取fd，然后后期的其他操作全部控制fd来完成对硬件设备的实际操作。</p>
+
+<h3 id="读写的hex数含义">读写的Hex数含义：</h3>
+<p>对于O_RDWR  的16进制的值是：02H ， <a href="http://bbs.chinaunix.net/thread-1026892-1-1.html">读写参数的Hex数值</a></p>
+
+<ul>
+  <li>#define O_RDONLY           00</li>
+  <li>#define O_WRONLY           01</li>
+  <li>#define O_RDWR             02</li>
+</ul>
+
+<p><strong>分析这段代码：</strong><font color="red">fd = open(path_utf, O_RDWR | flags) ;</font></p>
+
+<p><strong>一 、</strong> 在Open函数里面，传入flags值为0，进行按位或运算，得到的结果还是O_RDWR（02H），没有任何区别。所以说，其flags的值没有啥意义，也可以是这样理解的。</p>
+
+<p><strong>二 、</strong> 但是，我想Google之所以这样子去设计，肯定是有意义的，和公司的硬件大佬CJ大佬讨论以后。有以下的几点思考：</p>
+
+<ul>
+  <li>
+    <font color="red">对于Open函数本身而言</font>
+    <p>会根据不同的值，进行不同的操作，如可读写（O_RDWR），非阻塞（O_NONBLOCK）等等。因为Open函数本身不仅仅是操作，还可以操作各种文件。所以需要很多的设定。</p>
+  </li>
+  <li>
+    <font color="red">在Open函数中</font>
+    <p>对于串口的操作，肯定是必须可读可写，所以有O_RDWR。而与flags按位或运算。其根本目是，按位或的运算后的结果最后一位必须为2，例如xx 02 或者xx x2 。因为对于底层代码而言，最后一位是判断你是否可以读写的根本。所以Google的意思是最后一位必须固定不变，为<font color="red">"2"</font>,所以只需要保证最后一位是2就好，<font color="blue">我试了试传10H也就是flags为16（十进制），得到的结果为12H，最后一位为2。</font>发现完全是可以正常通信的。bingo ~ 结论正确</p>
+  </li>
+</ul>
+
+<p><img src="https://img-blog.csdnimg.cn/20190220120048101.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAzMTI5NDk=,size_16,color_FFFFFF,t_70" alt="你随意哦" /></p>
+
+<font size="4" color="red">结论：我倾向于理解为flags的值有意义的。</font>
+
+<p><strong>意义</strong>：必须保证串口的可读可写性，也就是其最后一位为2的条件下，进行拓展功能，如传入的flags值为04000H（O_NONBLOCK非阻塞），进行按位或得到04002，那么最后串口的open操作既能读写，又是非阻塞的。不过一般你使用直接设置为<font color="red">"0"</font>即可 ~ ~ ~嘻嘻  :）</p>
+
+<p><strong>—————————————————————————————————-</strong></p>
+
+<h3 id="源代码">源代码</h3>
+
+<ul>
+  <li>
+    <font size="4" color="red"> Github：</font>
+    <p>下载地址：！——&gt; <a href="https://github.com/jzt-Tesla/GoogleSerialPort">SerialPortの源代码</a></p>
+  </li>
+  <li>
+    <font size="4" color="red">CSDN：</font>
+    <p>下载地址：！——&gt; <a href="https://download.csdn.net/download/u010312949/10416547">SerialPortの源代码</a></p>
+  </li>
+</ul>
+
+<p><strong>—————————————————————————————————-</strong></p>
+
+<h3 id="参考">参考</h3>
+<p><a href="https://blog.csdn.net/q4878802/article/details/52996548">Android串口通信</a></p>
+
+<p><a href="https://blog.csdn.net/qiwenmingshiwo/article/details/49557889">android串口通信——android-serialport-api</a></p>
+
+<p><a href="https://blog.csdn.net/WarweeSZip/article/details/72956218">Android Studio下的串口程序开发实战</a></p>
+:ET
