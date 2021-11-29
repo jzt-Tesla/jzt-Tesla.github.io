@@ -10,7 +10,7 @@
 
 ## 致谢
 
-1. 这个模板是从这里 [qiubaiying](hhttps://github.com/qiubaiying/qiubaiying.github.io) fork 的, 感谢这个作者。 他的博客[BY Blog](http://qiubaiying.github.io)
+1. 这个模板是从这里 [qiubaiying](https://github.com/qiubaiying/qiubaiying.github.io) fork 的, 感谢这个作者。 他的博客[BY Blog](http://qiubaiying.github.io)
 2. 感谢 Jekyll、Github Pages 和 Bootstrap!
 
 ## License
