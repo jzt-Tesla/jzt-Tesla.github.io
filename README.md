@@ -1,7 +1,10 @@
 ## 遇见的一些问题
 
 1. 启动本地 jekyll 进行测试的时候，先开启本地服务命令 jekyll serve 成功后本地修改需要更新页面，使用命令"ctrl + C"，然后输入"Y"停止服务，再重复 jekyll serve 就成功了。
-2. 在博客的 md 文件中，需要插入图片，没用图床怎么办？当然可以参考这篇文章自建图床[GitHub + jsDelivr + PicGo + Imagine 打造稳定快速、高效免费图床](https://blog.csdn.net/qq_39047625/article/details/103048865).当然我觉得用 github 的图床速度还是太慢了，我先到 CSDN 上传文章，成功后就获得了免费的图床信息，再直接复制粘贴 md 文章就搞定了。
+- 2.1 在博客的 md 文件中，需要插入图片，没用图床怎么办？当然可以参考这篇文章自建图床[GitHub + jsDelivr + PicGo + Imagine 打造稳定快速、高效免费图床](https://blog.csdn.net/qq_39047625/article/details/103048865).当然我觉得用 github 的图床速度还是太慢了，我先到 CSDN 上传文章，成功后就获得了免费的图床信息，再直接复制粘贴 md 文章就搞定了。
+- 2.2 在2.1中我说了可以使用csdn的图床，因为它是公有的，而简书和微信公众号的图片是私有的。然后我在写博客的过程中发现因为我需要写一些自己感悟和诗歌的文章，不适合发表在CSDN中，于是我需要其它的图床[图速云_一款免费的图床](https://oss.bilnn.com/index.php)以及[一些其它图床](https://www.bilibili.com/read/cv4065587/)
+- 2.3 同样也可以使用[图床工具的使用](https://www.jianshu.com/p/9d91355e8418),它可以上传图片到指定图床
+- 2.4 当然我自己最后使用的是读取github项目中存储的图片，在md格式的博客中直接设置，譬如：[图片名字](/img/top.jpg)。指定文件夹指定的图片就OK了。
 3. 在使用网站统计的时候，因为原来的使用方法和代码已经失效了，我是直接到网站上注册的，非常简单，有手就行。[百度网站统计](https://tongji.baidu.com/web/welcome/basic)
 4. 在使用 gittalk 的时候有蛮多坑，最全的是这篇文章[Gitalk 评论插件，为你的博客快速集成评论功能](https://www.exception.site/essay/how-to-install-gitalk-on-your-blog)
 5. 搭建 jekyll 的过程中，我参考的是这篇文章[搭建 jekyll](https://blog.csdn.net/qq_27032631/article/details/106156088)
