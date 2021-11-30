@@ -1,22 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+  {% include head.html %}
 
-{% include head.html %}
+  <!-- hack iOS CSS :active style -->
+  <body ontouchstart="">
+    {% include nav.html %} {{ content }} {% include footer.html %}
 
-<!-- hack iOS CSS :active style -->
-<body ontouchstart="">
+    <!-- Image to hack wechat -->
+    <img src="/img/apple-touch-icon.png" width="0" height="0" />
+    <!-- Migrate from head to bottom, no longer block render and still work -->
+  </body>
+  <!-- 设置一个按钮，点击返回顶部 -->
+  <body>
+    <div id="to_top" title="返回顶部">
+      <img src="/img/top.jpg" width="40" height="40" />
+    </div>
+  </body>
 
-    {% include nav.html %}
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    #to_top {
+      right: 30px;
+      bottom: 30px;
+      position: fixed;
+      cursor: pointer;
+      display: none;
+    }
+  </style>
 
-    {{ content }}
+  <script>
+    window.onscroll = function () {
+      var distance =
+        document.documentElement.scrollTop || document.body.scrollTop; //距离页面顶部的距离
 
-    {% include footer.html %}
+      if (distance >= 300) {
+        //当距离顶部超过300px时，显示图片
+        document.getElementById("to_top").style.display = "inline";
+      } else {
+        //距离顶部小于300px，隐藏图片
+        document.getElementById("to_top").style.display = "none";
+      }
 
+      var toTop = document.getElementById("to_top"); //获取图片所在的div
 
-<!-- Image to hack wechat -->
-<img src="/img/apple-touch-icon.png" width="0" height="0" />
-<!-- Migrate from head to bottom, no longer block render and still work -->
-
-</body>
-
+      toTop.onclick = function () {
+        //点击图片时触发的点击事件
+        document.documentElement.scrollTop = document.body.scrollTop = 0; //页面移动到顶部
+      };
+    };
+  </script>
 </html>
