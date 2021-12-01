@@ -13,7 +13,7 @@
 - 8.1 在打开github和进行git push origin master的时候，出现了比较严重的上传time out ，导致了我的项目平均至少5分钟才能push一次。一方面是因为墙，另外一方面是因为github的dns受到了污染。
 - 8.2 首先我进行的是修改hosts文件进行重定向，发现打开github变快了，但是push项目依旧贼慢。
 - 8.3 于是我在github下载了ss或者ssr的梯子，可以连接外网google，所以解决了github打开速度的问题，但是依旧push慢腾腾。
-- 8.4 最后在我本科同学的帮助下，发现可以进行终端配置代理。发现对于windows系统里面直接上传，可以通过cmd 命令里面进行set http_proxy=http://127.0.0.1:8085；set https_proxys=http://127.0.0.1:8085，其中的1080是端口号，设置成你自己代理的端口号就行，譬如我的是8085。而我是通过gitbash，所以只用将set改为export就行。如果你是linux系统，那么和gitbash配置一样。
+- 8.4 最后在我本科同学的帮助下，发现可以进行终端配置代理。发现对于windows系统里面直接上传，可以通过cmd 命令里面进行set http_proxy=http://127.0.0.1:8085；set https_proxys=http://127.0.0.1:8085，其中的1080是端口号，设置成你自己代理的端口号就行，譬如我的是8085。而我是通过gitbash，所以只用将set改为export就行。
 
 ## 致谢
 
