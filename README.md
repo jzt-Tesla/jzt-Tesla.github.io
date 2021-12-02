@@ -63,7 +63,7 @@ If you have any questions you can submit a request at https://support.github.com
 | -------- | -------- | --------------- | ------------------------- |
 | @        | A        | 默认            | 你自己的 github 博客的 ip |
 | www      | A        | 默认            | 你自己的 github 博客的 ip |
-| www      | CNAME    | 默认            | jzt-tesla.github.io       |
+| www      | CNAME    | 默认            | jzt-tesla.github.io（改为你自己的）       |
 
 - 刚开始我是表格 1、2 行的写法会邮件警告，改为 1、3 行写法就行，将第 2 行删除即可。
 
