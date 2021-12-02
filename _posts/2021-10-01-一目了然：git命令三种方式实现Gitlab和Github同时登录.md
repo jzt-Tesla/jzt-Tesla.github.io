@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 高考往事
-subtitle: 高考
+title: 一目了然-git命令三种方式实现Gitlab和Github同时登录
+subtitle: git登陆
 date: 2021-06-07
 author: 公子江小花
 header-img: img/post_bg_essay.jpg
