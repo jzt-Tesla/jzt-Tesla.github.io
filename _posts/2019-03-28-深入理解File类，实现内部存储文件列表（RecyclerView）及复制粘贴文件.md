@@ -1,8 +1,8 @@
 ---
 layout: post
-title: 深入分析自定义View的事件分发机制
-subtitle: 事件分发机制
-date: 2021-11-28
+title: 深入理解File类，实现内部存储文件列表（RecyclerView）及复制粘贴文件
+subtitle: Files类使用详解
+date: 2019-03-28
 author: 霜刃西瓜
 header-img: img/post_bg_Android.jpg
 catalog: ture
